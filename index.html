@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toronto One-Day Adventure - Oct 5, 2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            height: calc(100vh - 40px);
+        }
+        @media (max-width: 1024px) {
+            .container { grid-template-columns: 1fr; height: auto; }
+            #map { height: 60vh !important; order: -1; }
+        }
+        .itinerary-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        #map {
+            height: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .alert {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .alert strong { color: #856404; }
+        .step {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+        .step-number {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .step-time {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            margin-left: 30px;
+        }
+        .step h3 {
+            color: #2c3e50;
+            margin: 15px 0 10px 0;
+            font-size: 20px;
+        }
+        .step-details {
+            margin-top: 12px;
+            line-height: 1.8;
+        }
+        .icon { margin-right: 8px; }
+        .duration {
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 8px 0;
+        }
+        .cost {
+            background: #fff0e6;
+            color: #ff6b35;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 8px 8px 8px 0;
+        }
+        .transit {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 600;
+            border-left: 3px solid #4caf50;
+        }
+        .food-stop {
+            background: #fff3e0;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 3px solid #ff9800;
+        }
+        .tip {
+            background: #f3e5f5;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 3px solid #9c27b0;
+            font-size: 14px;
+        }
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .summary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .summary h2 { margin-bottom: 15px; font-size: 20px; }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .summary-item {
+            background: rgba(255,255,255,0.2);
+            padding: 12px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        .summary-item strong { display: block; margin-bottom: 5px; }
+        
+        /* Enhanced Map Styles */
+        .custom-popup .leaflet-popup-content-wrapper {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            padding: 5px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        .custom-popup .leaflet-popup-content {
+            margin: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .custom-popup .leaflet-popup-tip {
+            background: #667eea;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .map-legend {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-size: 13px;
+            line-height: 2;
+        }
+        .map-legend h4 {
+            margin: 0 0 10px 0;
+            font-size: 15px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        .legend-line {
+            width: 30px;
+            height: 3px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+        .legend-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: white;
+            font-weight: bold;
+        }
+        @media print {
+            body { background: white; }
+            .container { display: block; }
+            #map { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="itinerary-panel">
+            <h1>🍁 Toronto One-Day Adventure</h1>
+            <div class="date-badge">📅 Sunday, October 5, 2025</div>
+            
+            <div class="alert">
+                <strong>🎉 TODAY'S SPECIALS!</strong><br>
+                • <span class="highlight">ROM Main Floor = FREE</span> (Oct 1-Nov 30)<br>
+                • <span class="highlight">Last Day of Oktoberfest</span> at Distillery (12-9pm, $10 festbier!)
+            </div>
+
+            <div class="summary">
+                <h2>📊 Day Summary</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <strong>⏱️ Total Time</strong>
+                        10:00 AM - 8:30 PM
+                    </div>
+                    <div class="summary-item">
+                        <strong>💰 Est. Cost</strong>
+                        $75-95 CAD
+                    </div>
+                    <div class="summary-item">
+                        <strong>🚶 Walking</strong>
+                        ~4 km total
+                    </div>
+                    <div class="summary-item">
+                        <strong>🚇 TTC Rides</strong>
+                        2-3 rides ($3.35 each)
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 1 -->
+            <div class="step" onclick="focusOnMap(1)">
+                <div class="step-number">1</div>
+                <div class="step-time">⏰ 10:00 - 11:00 AM</div>
+                <h3>🗼 CN Tower</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 60 min</span>
+                    <span class="cost">💰 $45 CAD</span>
+                    <p><strong>📍 290 Bremner Blvd</strong></p>
+                    <p>Start your day at Canada's iconic landmark! Take the glass elevator to 346m high Main Observation Level. Walk on the Glass Floor if you dare!</p>
+                    <div class="tip">
+                        💡 <strong>Pro Tip:</strong> Buy tickets online NOW to skip lines. Best time = before 11am. Look for Niagara Falls on clear days!
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 2 -->
+            <div class="step" onclick="focusOnMap(2)">
+                <div class="step-number">2</div>
+                <div class="step-time">⏰ 11:00 - 12:15 PM</div>
+                <h3>🐠 Ripley's Aquarium</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 75 min</span>
+                    <span class="cost">💰 $35-40 CAD</span>
+                    <p><strong>📍 288 Bremner Blvd (2 min walk)</strong></p>
+                    <p>Walk 2 minutes to explore 20,000+ aquatic animals. Don't miss the Dangerous Lagoon tunnel with sharks swimming overhead!</p>
+                    <div class="tip">
+                        💡 <strong>Pro Tip:</strong> "Sea The Sky" combo ticket saves money if you book CN Tower + Aquarium together online.
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 3 -->
+            <div class="step" onclick="focusOnMap(3)">
+                <div class="step-number">3</div>
+                <div class="step-time">⏰ 12:15 - 12:30 PM</div>
+                <h3>🚶 Walk to Union Station</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 8 min walk (600m)</span>
+                    <p>Head northeast on Bremner Blvd, turn right on York St, walk to Front St W.</p>
+                    <div class="food-stop">
+                        🍕 <strong>Quick Snack:</strong> Grab coffee at Union Station's food court or walk through the PATH underground for options.
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 4 -->
+            <div class="step" onclick="focusOnMap(4)">
+                <div class="step-number">4</div>
+                <div class="step-time">⏰ 12:30 - 1:30 PM</div>
+                <h3>🥖 St. Lawrence Market</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 60 min</span>
+                    <span class="cost">💰 $15-20 for lunch</span>
+                    <p><strong>📍 92-95 Front St E (10 min walk, 850m)</strong></p>
+                    <p>Walk east on Front St. World's best food market (National Geographic, 2012)!</p>
+                    <div class="food-stop">
+                        🥪 <strong>MUST EAT:</strong><br>
+                        • <strong>Carousel Bakery</strong> - Famous peameal bacon sandwich ($8-10)<br>
+                        • <strong>Mike's Fish Market</strong> - Fresh oysters & steamed lobster (sit & eat!)<br>
+                        • Browse 100+ vendors for cheeses, baked goods, international foods
+                    </div>
+                    <div class="tip">
+                        💡 Open 10am-5pm Sundays. Lower level has great artisan vendors!
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 5 -->
+            <div class="step" onclick="focusOnMap(5)">
+                <div class="step-number">5</div>
+                <div class="step-time">⏰ 1:45 - 3:15 PM</div>
+                <h3>🎨 Distillery Historic District</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 90 min</span>
+                    <span class="cost">💰 FREE entry + $10-15 for drinks</span>
+                    <p><strong>📍 55 Mill St (10 min walk, 750m)</strong></p>
+                    <p>Walk south on Parliament St, then east on Mill St. Pedestrian-only Victorian industrial village.</p>
+                    <div class="alert" style="background: #fff3cd;">
+                        <strong>🍺 OKTOBERFEST - LAST DAY!</strong><br>
+                        Mill Street Brewpub Courtyard: $10 Festbier, German bites, live music 12-9pm. Get a souvenir stein for $8!
+                    </div>
+                    <div class="food-stop">
+                        ☕ <strong>Balzac's Coffee</strong> - Perfect for afternoon pick-me-up<br>
+                        🍺 <strong>Mill Street Brewpub</strong> - Oktoberfest fun!
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 6 -->
+            <div class="step" onclick="focusOnMap(6)">
+                <div class="step-number">6</div>
+                <div class="step-time">⏰ 3:30 - 3:50 PM</div>
+                <h3>🚇 TTC to ROM</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 20 min total</span>
+                    <span class="cost">💰 $3.35</span>
+                    <div class="transit">
+                        🚊 <strong>Route:</strong><br>
+                        1. Walk 5 min west to <strong>King Station</strong> (Parliament & King)<br>
+                        2. Take <strong>Line 1 (Yellow) NORTHBOUND</strong><br>
+                        3. Ride 5 stops (8 min) to <strong>Museum Station</strong><br>
+                        4. Exit at Museum - ROM is across the street!
+                    </div>
+                    <div class="tip">
+                        💡 Buy PRESTO card or use contactless payment. Keep your receipt for transfers!
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 7 -->
+            <div class="step" onclick="focusOnMap(7)">
+                <div class="step-number">7</div>
+                <div class="step-time">⏰ 3:50 - 5:00 PM</div>
+                <h3>🦕 Royal Ontario Museum (ROM)</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 70 min</span>
+                    <span class="cost">💰 FREE (Main Floor)</span>
+                    <p><strong>📍 100 Queen's Park</strong></p>
+                    <div class="alert" style="background: #d4edda; border-color: #28a745;">
+                        <strong>🎉 FREE MAIN FLOOR ACCESS!</strong><br>
+                        Oct 1-Nov 30 program includes ground floor galleries. Book free ticket online in advance!
+                    </div>
+                    <p>World-class museum with 18M+ objects. See dinosaurs, mummies, Chinese architecture, Indigenous artifacts!</p>
+                    <div class="tip">
+                        💡 Closes 5:30pm. Focus on main floor highlights. Full admission ~$25 if you want all floors.
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 8 -->
+            <div class="step" onclick="focusOnMap(8)">
+                <div class="step-number">8</div>
+                <div class="step-time">⏰ 5:00 - 6:00 PM</div>
+                <h3>🌿 Kensington Market</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 60 min</span>
+                    <span class="cost">💰 $10-15</span>
+                    <p><strong>📍 Kensington Ave area (15 min walk, 1.2km)</strong></p>
+                    <p>Walk west on Bloor, then south on Spadina, west on College. Eclectic bohemian neighborhood!</p>
+                    <div class="food-stop">
+                        🌮 <strong>Seven Lives Tacos</strong> - Best fish tacos in Toronto ($4-6 each)<br>
+                        🧀 <strong>Global Cheese</strong> - Amazing cheese shop<br>
+                        Browse colorful vintage stores and murals
+                    </div>
+                    <div class="tip">
+                        💡 Many shops close 6-7pm Sundays. Go early! Very walkable, pedestrian-friendly.
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 9 -->
+            <div class="step" onclick="focusOnMap(9)">
+                <div class="step-number">9</div>
+                <div class="step-time">⏰ 6:15 - 7:00 PM</div>
+                <h3>🏛️ Nathan Phillips Square & City Hall</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 45 min</span>
+                    <span class="cost">💰 FREE</span>
+                    <p><strong>📍 100 Queen St W (20 min walk, 1.5km)</strong></p>
+                    <p>Walk east on Dundas, then south to Queen St. Iconic Toronto sign, reflecting pool, modern architecture!</p>
+                    <div class="tip">
+                        💡 Great photo ops at the TORONTO sign. Eaton Centre is right next door if you need to shop or use facilities.
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP 10 -->
+            <div class="step" onclick="focusOnMap(10)">
+                <div class="step-number">10</div>
+                <div class="step-time">⏰ 7:30 - 8:30 PM</div>
+                <h3>🌅 Canoe Landing Park</h3>
+                <div class="step-details">
+                    <span class="duration">⏱️ 45 min</span>
+                    <span class="cost">💰 FREE</span>
+                    <p><strong>📍 95 Fort York Blvd</strong></p>
+                    <div class="transit">
+                        🚇 From Dundas Station, take Line 1 south to Union (3 min)<br>
+                        Then walk or take 509/510 streetcar west to Fort York
+                    </div>
+                    <p>Sunset views of CN Tower & waterfront. Red canoe sculptures. Peaceful end to busy day.</p>
+                    <div class="food-stop">
+                        🍽️ <strong>Dinner Option:</strong> Entertainment District nearby:<br>
+                        • <strong>Canoe Restaurant</strong> (upscale Canadian, 54th floor)<br>
+                        • <strong>Steam Whistle Brewing</strong> (casual brewery)<br>
+                        • <strong>King St W</strong> - dozens of restaurants
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary">
+                <h2>📝 Important Notes</h2>
+                <p><strong>🌡️ Weather:</strong> October = 10-15°C. Bring layers & comfy shoes!</p>
+                <p><strong>🎫 Book Ahead:</strong> CN Tower, Ripley's, ROM free ticket</p>
+                <p><strong>💳 Payment:</strong> Most places take card. Some market vendors cash only.</p>
+                <p><strong>📱 Apps:</strong> TTC app, Google Maps, ROM app</p>
+                <p><strong>🚽 Facilities:</strong> All attractions have restrooms. Public ones at Union Station, Eaton Centre.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                <h3 style="color: #667eea; margin-bottom: 10px;">Have an Amazing Day in Toronto! 🍁</h3>
+                <p style="font-size: 14px; color: #666;">Click any stop above to focus on it on the map!</p>
+            </div>
+        </div>
+
+        <div id="map"></div>
+    </div>
+
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([43.6532, -79.3832], 13);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Store markers for focus function
+        const markers = {};
+
+        // Custom numbered icons with gradient
+        function createNumberIcon(num, color, isTransit = false) {
+            const icon = isTransit ? '🚇' : num;
+            const size = isTransit ? '20px' : '16px';
+            return L.divIcon({
+                html: `<div style="background: linear-gradient(135deg, ${color}, ${adjustColor(color, -20)}); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size}; border: 3px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); animation: bounce 2s ease-in-out infinite;">${icon}</div>
+                <style>
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-5px); }
+                }
+                </style>`,
+                className: '',
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
+        }
+
+        function adjustColor(color, amount) {
+            return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+        }
+
+        // Main stops with detailed info
+        const stops = [
+            { 
+                num: 1, name: "CN Tower", lat: 43.6426, lng: -79.3871, 
+                color: "#667eea", time: "10:00 AM", 
+                info: "Start here! 553m tall. Glass floor at 342m. Amazing views!"
+            },
+            { 
+                num: 2, name: "Ripley's Aquarium", lat: 43.6424, lng: -79.3860, 
+                color: "#1e88e5", time: "11:00 AM",
+                info: "20,000 aquatic animals. Dangerous Lagoon tunnel is incredible!"
+            },
+            { 
+                num: 3, name: "Union Station", lat: 43.6456, lng: -79.3804, 
+                color: "#43a047", time: "12:15 PM",
+                info: "Historic train station. Food court & PATH underground mall."
+            },
+            { 
+                num: 4, name: "St. Lawrence Market", lat: 43.6487, lng: -79.3715, 
+                color: "#fb8c00", time: "12:30 PM",
+                info: "World's best food market! Get the peameal bacon sandwich!"
+            },
+            { 
+                num: 5, name: "Distillery District", lat: 43.6503, lng: -79.3596, 
+                color: "#e53935", time: "1:45 PM",
+                info: "Victorian industrial area. LAST DAY of Oktoberfest today!"
+            },
+            { 
+                num: 6, name: "King Station", lat: 43.6490, lng: -79.3778, 
+                color: "#00897b", time: "3:30 PM",
+                info: "TTC Line 1 (Yellow). Take northbound to Museum.", isTransit: true
+            },
+            { 
+                num: 7, name: "Royal Ontario Museum", lat: 43.6677, lng: -79.3948, 
+                color: "#8e24aa", time: "3:50 PM",
+                info: "FREE main floor today! 18M+ artifacts. Closes 5:30pm."
+            },
+            { 
+                num: 8, name: "Kensington Market", lat: 43.6540, lng: -79.4022, 
+                color: "#d81b60", time: "5:00 PM",
+                info: "Bohemian neighborhood. Best fish tacos at Seven Lives!"
+            },
+            { 
+                num: 9, name: "Nathan Phillips Square", lat: 43.6525, lng: -79.3839, 
+                color: "#5e35b1", time: "6:15 PM",
+                info: "TORONTO sign here! City Hall. Great photo spot!"
+            },
+            { 
+                num: 10, name: "Canoe Landing Park", lat: 43.6377, lng: -79.3971, 
+                color: "#00acc1", time: "7:30 PM",
+                info: "Sunset views of CN Tower. Red canoe sculptures."
+            }
+        ];
+
+        // Additional transit waypoints
+        const transitWaypoints = [
+            { name: "Museum Station", lat: 43.6676, lng: -79.3937, type: "metro", line: "Line 1 (Yellow)" },
+            { name: "Dundas Station", lat: 43.6563, lng: -79.3805, type: "metro", line: "Line 1 (Yellow)" }
+        ];
+
+        // Add main stop markers with enhanced popups
+        stops.forEach(stop => {
+            const marker = L.marker([stop.lat, stop.lng], { 
+                icon: createNumberIcon(stop.num, stop.color, stop.isTransit)
+            })
+            .bindPopup(`
+                <div style="font-family: Arial; min-width: 200px;">
+                    <h3 style="margin: 0 0 8px 0; color: white; font-size: 16px;">
+                        ${stop.isTransit ? '🚇' : stop.num + '.'} ${stop.name}
+                    </h3>
+                    <p style="margin: 5px 0; font-size: 13px;"><strong>⏰ ${stop.time}</strong></p>
+                    <p style="margin: 5px 0; font-size: 12px; line-height: 1.5;">${stop.info}</p>
+                </div>
+            `, { className: 'custom-popup' })
+            .addTo(map);
+            
+            markers[stop.num] = marker;
+        });
+
+        // Add transit station markers
+        transitWaypoints.forEach(wp => {
+            const icon = L.divIcon({
+                html: `<div style="background: #00897b; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">Ⓜ️</div>`,
+                className: '',
+                iconSize: [28, 28],
+                iconAnchor: [14, 14]
+            });
+            
+            L.marker([wp.lat, wp.lng], { icon })
+                .bindPopup(`<strong>${wp.name}</strong><br>${wp.line}`)
+                .addTo(map);
+        });
+
+        // Detailed walking routes with waypoints
+        const walkingRoutes = [
+            {
+                name: "CN Tower → Aquarium",
+                coords: [[43.6426, -79.3871], [43.6424, -79.3860]],
+                color: "#667eea",
+                distance: "150m",
+                time: "2 min"
+            },
+            {
+                name: "Aquarium → Union",
+                coords: [
+                    [43.6424, -79.3860],
+                    [43.6432, -79.3850],
+                    [43.6445, -79.3820],
+                    [43.6456, -79.3804]
+                ],
+                color: "#667eea",
+                distance: "600m",
+                time: "8 min"
+            },
+            {
+                name: "Union → St. Lawrence",
+                coords: [
+                    [43.6456, -79.3804],
+                    [43.6465, -79.3775],
+                    [43.6475, -79.3740],
+                    [43.6487, -79.3715]
+                ],
+                color: "#fb8c00",
+                distance: "850m",
+                time: "10 min"
+            },
+            {
+                name: "Market → Distillery",
+                coords: [
+                    [43.6487, -79.3715],
+                    [43.6490, -79.3680],
+                    [43.6495, -79.3640],
+                    [43.6503, -79.3596]
+                ],
+                color: "#fb8c00",
+                distance: "750m",
+                time: "10 min"
+            },
+            {
+                name: "Distillery → King Station",
+                coords: [
+                    [43.6503, -79.3596],
+                    [43.6495, -79.3650],
+                    [43.6490, -79.3720],
+                    [43.6490, -79.3778]
+                ],
+                color: "#00897b",
+                distance: "450m",
+                time: "5 min"
+            },
+            {
+                name: "Museum → Kensington",
+                coords: [
+                    [43.6677, -79.3948],
+                    [43.6670, -79.3985],
+                    [43.6600, -79.4010],
+                    [43.6540, -79.4022]
+                ],
+                color: "#8e24aa",
+                distance: "1.2km",
+                time: "15 min"
+            },
+            {
+                name: "Kensington → Nathan Phillips",
+                coords: [
+                    [43.6540, -79.4022],
+                    [43.6545, -79.3950],
+                    [43.6555, -79.3880],
+                    [43.6525, -79.3839]
+                ],
+                color: "#d81b60",
+                distance: "1.5km",
+                time: "20 min"
+            }
+        ];
+
+        // Draw walking routes with labels
+        walkingRoutes.forEach((route, index) => {
+            const polyline = L.polyline(route.coords, {
+                color: route.color,
+                weight: 5,
+                opacity: 0.7,
+                dashArray: '10, 8',
+                lineCap: 'round'
+            }).addTo(map);
+            
+            polyline.bindPopup(`
+                <strong>🚶 ${route.name}</strong><br>
+                Distance: ${route.distance}<br>
+                Time: ${route.time}
+            `);
+
+            // Add animated dots along path
+            const decorator = L.polyline(route.coords, {
+                color: route.color,
+                weight: 2,
+                opacity: 0.5,
+                dashArray: '1, 20'
+            }).addTo(map);
+        });
+
+        // Transit route (subway)
+        const subwayRoute = [
+            [43.6490, -79.3778], // King Station
+            [43.6510, -79.3795], // Waypoint
+            [43.6530, -79.3810], // Queen
+            [43.6563, -79.3805], // Dundas
+            [43.6600, -79.3820], // Waypoint
+            [43.6640, -79.3880], // Waypoint
+            [43.6676, -79.3937]  // Museum Station
+        ];
+
+        L.polyline(subwayRoute, {
+            color: '#00897b',
+            weight: 6,
+            opacity: 0.9,
+            lineCap: 'round'
+        }).bindPopup(`
+            <strong>🚇 TTC Line 1 (Yellow)</strong><br>
+            King → Museum Station<br>
+            5 stops, ~8 minutes<br>
+            Cost: $3.35
+        `).addTo(map);
+
+        // Enhanced legend
+        const legend = L.control({position: 'topright'});
+        legend.onAdd = function() {
+            const div = L.DomUtil.create('div', 'map-legend');
+            div.innerHTML = `
+                <h4>🗺️ Your Toronto Journey</h4>
+                <div class="legend-item">
+                    <div class="legend-icon" style="background: #667eea;">1-2</div>
+                    <span>Morning (10am-12pm)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon" style="background: #fb8c00;">3-5</div>
+                    <span>Lunch & Culture (12-4pm)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon" style="background: #8e24aa;">6-7</div>
+                    <span>TTC + Museum (4-5pm)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon" style="background: #d81b60;">8-9</div>
+                    <span>Evening (5-7pm)</span>
+                </div>
+                <hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">
+                <div class="legend-item">
+                    <div class="legend-line" style="background: #667eea; border: 2px dashed #667eea;"></div>
+                    <span>Walking Route</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line" style="background: #00897b;"></div>
+                    <span>TTC Subway</span>
+                </div>
+                <div class="legend-item">
+                    <span style="margin-right: 10px;">Ⓜ️</span>
+                    <span>Metro Station</span>
+                </div>
+            `;
+            return div;
+        };
+        legend.addTo(map);
+
+        // Focus function
+        window.focusOnMap = function(num) {
+            const marker = markers[num];
+            if (marker) {
+                map.setView(marker.getLatLng(), 16, { animate: true });
+                marker.openPopup();
+            }
+        };
+
+        // Add scale
+        L.control.scale({ imperial: false, metric: true }).addTo(map);
+
+        // Fit all markers on load
+        const bounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
+        map.fitBounds(bounds, { padding: [50, 50] });
+    </script>
+</body>
+</html>
