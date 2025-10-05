@@ -23,7 +23,155 @@
             height: calc(100vh - 40px);
         }
         /* Tablet */
-        @media (max-width: 1024px) {
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            flex: 1;
+            min-width: 150px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        .progress-tracker {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .progress-bar-container {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        .checkpoint {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .checkpoint.completed {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+            .action-btn {
+                min-width: 100%;
+            }
+        }
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .info-section h3 {
+            color: #667eea;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .info-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .info-item strong {
+            display: block;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        .maps-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 8px 8px 0 0;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .maps-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .maps-button:active {
+            transform: translateY(0);
+        }
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .info-section {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
+            .info-section h3 {
+                font-size: 16px;
+            }
+            .info-item {
+                padding: 10px;
+                font-size: 13px;
+            }
+            .maps-button {
+                display: block;
+                text-align: center;
+                margin: 8px 0 0 0;
+            }
+        }
             .container { 
                 grid-template-columns: 1fr; 
                 height: auto; 
@@ -478,6 +626,38 @@
             <h1>🍁 Jay's Toronto Guide</h1>
             <div class="date-badge">🎯 The Ultimate One-Day Adventure</div>
             
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn" onclick="shareGuide()">📤 Share Guide</button>
+                <button class="action-btn" onclick="window.print()">🖨️ Print/Save PDF</button>
+                <button class="action-btn" onclick="downloadOffline()">📥 Offline Mode</button>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div class="progress-tracker">
+                <h3 style="margin: 0 0 10px 0; color: #667eea; font-size: 16px;">📍 Track Your Progress</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span id="progress-text" style="font-size: 14px; color: #666;">0 of 10 stops completed</span>
+                    <span id="progress-percent" style="font-size: 14px; font-weight: bold; color: #667eea;">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <span class="checkpoint" data-stop="1" onclick="toggleCheckpoint(1)"></span>
+                    <span class="checkpoint" data-stop="2" onclick="toggleCheckpoint(2)"></span>
+                    <span class="checkpoint" data-stop="3" onclick="toggleCheckpoint(3)"></span>
+                    <span class="checkpoint" data-stop="4" onclick="toggleCheckpoint(4)"></span>
+                    <span class="checkpoint" data-stop="5" onclick="toggleCheckpoint(5)"></span>
+                    <span class="checkpoint" data-stop="6" onclick="toggleCheckpoint(6)"></span>
+                    <span class="checkpoint" data-stop="7" onclick="toggleCheckpoint(7)"></span>
+                    <span class="checkpoint" data-stop="8" onclick="toggleCheckpoint(8)"></span>
+                    <span class="checkpoint" data-stop="9" onclick="toggleCheckpoint(9)"></span>
+                    <span class="checkpoint" data-stop="10" onclick="toggleCheckpoint(10)"></span>
+                </div>
+                <p style="font-size: 12px; color: #888; margin-top: 10px; text-align: center;">Tap circles to mark stops as completed</p>
+            </div>
+            
             <div class="alert">
                 <strong>💡 Before You Go:</strong><br>
                 • Check attraction websites for <span class="highlight">current hours & prices</span><br>
@@ -498,13 +678,24 @@
                         $70-120 CAD
                     </div>
                     <div class="summary-item">
-                        <strong>🚶 Walking</strong>
-                        ~4-5 km total
+                        <strong>🚶 Total Walking</strong>
+                        ~4.9 km (3 miles)
                     </div>
                     <div class="summary-item">
-                        <strong>🚇 TTC</strong>
-                        2-3 rides needed
+                        <strong>🚇 TTC Rides</strong>
+                        2-3 rides (~$10 total)
                     </div>
+                    <div class="summary-item">
+                        <strong>🔥 Calories Burned</strong>
+                        ~600-800 kcal (walking)
+                    </div>
+                    <div class="summary-item">
+                        <strong>📸 Photo Spots</strong>
+                        10+ Instagram-worthy locations
+                    </div>
+                </div>
+                <div style="margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.2); border-radius: 8px; font-size: 13px;">
+                    <strong>💡 Quick Tip:</strong> Download offline maps and take screenshots of directions before you go!
                 </div>
             </div>
 
@@ -517,6 +708,7 @@
                     <span class="duration">⏱️ 60 min</span>
                     <span class="cost">💰 $40-50 CAD</span>
                     <p><strong>📍 290 Bremner Blvd</strong></p>
+                    <button class="maps-button" onclick="event.stopPropagation(); openInMaps(43.6426, -79.3871, 'CN Tower')">📍 Open in Maps</button>
                     <p><strong>Hours:</strong> Daily 9am-10pm (varies seasonally)</p>
                     <p>Start at Canada's iconic 553m landmark! Glass elevator to Main Observation Level (346m). Walk on the Glass Floor if you dare!</p>
                     <div class="tip">
@@ -534,6 +726,7 @@
                     <span class="duration">⏱️ 60-90 min</span>
                     <span class="cost">💰 $35-45 CAD</span>
                     <p><strong>📍 288 Bremner Blvd (2 min walk)</strong></p>
+                    <button class="maps-button" onclick="event.stopPropagation(); openInMaps(43.6424, -79.3860, 'Ripleys Aquarium')">📍 Open in Maps</button>
                     <p><strong>Hours:</strong> Daily 9am-9pm</p>
                     <p>20,000+ aquatic animals across 9 galleries. Dangerous Lagoon underwater tunnel is breathtaking - sharks and rays swim overhead!</p>
                     <div class="tip">
@@ -549,6 +742,7 @@
                 <h3>🚶 Walk to Union Station</h3>
                 <div class="step-details">
                     <span class="duration">⏱️ 8 min walk (600m)</span>
+                    <button class="maps-button" onclick="event.stopPropagation(); openInMaps(43.6456, -79.3804, 'Union Station Toronto')">📍 Open in Maps</button>
                     <p>Head northeast on Bremner Blvd, right on York St, walk to Front St W.</p>
                     <div class="food-stop">
                         🍕 <strong>Quick Options:</strong> Union Station food court has everything from coffee to full meals. PATH underground system connects to dozens of restaurants.
@@ -565,6 +759,8 @@
                     <span class="duration">⏱️ 60-90 min</span>
                     <span class="cost">💰 $15-25 lunch</span>
                     <p><strong>📍 92-95 Front St E (10 min walk, 850m)</strong></p>
+                    <button class="maps-button" onclick="event.stopPropagation(); openInMaps(43.6487, -79.3715, 'St Lawrence Market')">📍 Open in Maps</button>
+                    <button class="maps-button" onclick="event.stopPropagation(); getDirections(43.6424, -79.3860, 43.6487, -79.3715)">🧭 Directions from Aquarium</button>
                     <p><strong>Hours:</strong> Tue-Thu 9am-7pm, Fri 9am-7pm, Sat 7am-5pm, Sun 10am-5pm (Closed Mondays)</p>
                     <p>Walk east on Front St. World's best food market per National Geographic! Over 100 vendors.</p>
                     <div class="food-stop">
@@ -715,52 +911,174 @@
                 </div>
             </div>
 
-            <div class="summary">
-                <h2>📝 Essential Information</h2>
-                <p><strong>🌡️ Weather by Season:</strong></p>
-                <p>• <strong>Winter (Dec-Feb):</strong> -5 to 0°C. Bundle up! Ice skating, holiday markets<br>
-                • <strong>Spring (Mar-May):</strong> 5-15°C. Layers needed. Cherry blossoms in April<br>
-                • <strong>Summer (Jun-Aug):</strong> 20-30°C. Sunny & humid. Festivals galore!<br>
-                • <strong>Fall (Sep-Nov):</strong> 10-20°C. Perfect weather. Fall colors peak in October</p>
+            <div style="margin-top: 30px;">
+                <h2 style="color: #667eea; margin-bottom: 20px; font-size: 24px;">📝 Essential Information</h2>
                 
-                <p><strong>💳 Money Matters:</strong></p>
-                <p>• Most places accept credit/debit cards<br>
-                • St. Lawrence Market & Kensington: some vendors cash only<br>
-                • ATMs widely available<br>
-                • Tipping: 15-20% at restaurants, $1-2 for coffee</p>
-                
-                <p><strong>🎫 Advance Booking:</strong></p>
-                <p>• CN Tower & Ripley's: Book online to skip lines<br>
-                • ROM: Check for free admission days & book timed tickets<br>
-                • Toronto CityPASS: Save 38% on 5 top attractions ($88 adult, $59 child)</p>
-                
-                <p><strong>📱 Essential Apps:</strong></p>
-                <p>• <strong>TTC (Transit Toronto):</strong> Live transit times<br>
-                • <strong>Google Maps:</strong> Navigation & transit directions<br>
-                • <strong>ROM/CN Tower Apps:</strong> Interactive guides<br>
-                • <strong>Uber/Lyft:</strong> Rideshare options</p>
-                
-                <p><strong>🚽 Facilities:</strong></p>
-                <p>• All attractions have clean restrooms<br>
-                • Public washrooms: Union Station, Eaton Centre, Harbourfront<br>
-                • Most restaurants/cafes welcome customers</p>
-                
-                <p><strong>🎯 Best Days to Visit:</strong></p>
-                <p>• Weekdays less crowded at attractions<br>
-                • Saturday: St. Lawrence Farmers Market (5am-3pm)<br>
-                • Sunday: Some shops close early, check hours<br>
-                • Avoid: Canadian holidays (busier & some closures)</p>
+                <!-- Weather Section -->
+                <div class="info-section">
+                    <h3>🌡️ Weather by Season</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>❄️ Winter (Dec-Feb)</strong>
+                            -5 to 0°C. Bundle up! Ice skating, holiday markets, snowy charm.
+                        </div>
+                        <div class="info-item">
+                            <strong>🌸 Spring (Mar-May)</strong>
+                            5-15°C. Layers needed. Cherry blossoms in April, parks come alive.
+                        </div>
+                        <div class="info-item">
+                            <strong>☀️ Summer (Jun-Aug)</strong>
+                            20-30°C. Sunny & humid. Festivals, patios, best outdoor weather!
+                        </div>
+                        <div class="info-item">
+                            <strong>🍂 Fall (Sep-Nov)</strong>
+                            10-20°C. Perfect weather. Fall colors peak in October, comfortable walking.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Money Section -->
+                <div class="info-section">
+                    <h3>💳 Money Matters</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>Payment Methods</strong>
+                            Most places accept credit/debit. Some market vendors prefer cash.
+                        </div>
+                        <div class="info-item">
+                            <strong>Budget Range</strong>
+                            Budget: $70-90 | Moderate: $100-150 | Splurge: $200+
+                        </div>
+                        <div class="info-item">
+                            <strong>Tipping Guide</strong>
+                            Restaurants: 15-20% | Coffee/Quick service: $1-2 | Taxis: 10-15%
+                        </div>
+                        <div class="info-item">
+                            <strong>ATMs & Exchange</strong>
+                            ATMs widely available. Exchange at banks for best rates, not airport.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Section -->
+                <div class="info-section">
+                    <h3>🎫 Advance Booking Tips</h3>
+                    <div class="info-item">
+                        <strong>Book These Online:</strong><br>
+                        • CN Tower & Ripley's - Skip lines, save time<br>
+                        • ROM - Check for free admission days, book timed tickets<br>
+                        • Toronto CityPASS - Save 38% on 5 attractions ($88 adult, $59 child)<br>
+                        • EdgeWalk at CN Tower - Book weeks ahead, popular activity
+                    </div>
+                </div>
+
+                <!-- Apps & Tools Section -->
+                <div class="info-section">
+                    <h3>📱 Essential Apps & Tools</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>Transit</strong>
+                            TTC app (live times), Google Maps (directions), PRESTO card app
+                        </div>
+                        <div class="info-item">
+                            <strong>Attractions</strong>
+                            ROM app, CN Tower app (interactive guides & info)
+                        </div>
+                        <div class="info-item">
+                            <strong>Getting Around</strong>
+                            Uber, Lyft, Bike Share Toronto app
+                        </div>
+                        <div class="info-item">
+                            <strong>Useful</strong>
+                            Weather app, Yelp/Google Reviews for food, OpenTable for reservations
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Facilities Section -->
+                <div class="info-section">
+                    <h3>🚽 Facilities & Services</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>Restrooms</strong>
+                            All attractions, Union Station, Eaton Centre, Harbourfront. Most cafes welcome customers.
+                        </div>
+                        <div class="info-item">
+                            <strong>WiFi</strong>
+                            Free at attractions, cafes, Union Station. City of Toronto public WiFi in many areas.
+                        </div>
+                        <div class="info-item">
+                            <strong>Luggage Storage</strong>
+                            Union Station lockers, hotel concierge (even if not guest), some attractions
+                        </div>
+                        <div class="info-item">
+                            <strong>Phone/SIM Cards</strong>
+                            Major carriers: Rogers, Bell, Telus. Tourist SIM cards at airport, convenience stores
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Best Times Section -->
+                <div class="info-section">
+                    <h3>🎯 Best Times to Visit</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>Least Crowded</strong>
+                            Weekday mornings (except holidays). Early birds get best photos!
+                        </div>
+                        <div class="info-item">
+                            <strong>Special Days</strong>
+                            Saturday: Farmers Market 5am-3pm | ROM 3rd Tue free evenings
+                        </div>
+                        <div class="info-item">
+                            <strong>Watch Out</strong>
+                            Sunday: Some shops close early. Monday: St. Lawrence Market closed
+                        </div>
+                        <div class="info-item">
+                            <strong>Holidays</strong>
+                            Canadian holidays = busier & some closures. Check ahead!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Safety & Accessibility -->
+                <div class="info-section">
+                    <h3>♿ Accessibility & Safety</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>Wheelchair Access</strong>
+                            All major attractions fully accessible. TTC has elevators. Streets have curb cuts.
+                        </div>
+                        <div class="info-item">
+                            <strong>Safety</strong>
+                            Toronto is very safe. Stay aware in crowded areas. Emergency: 911
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div style="text-align: center; margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px;">
-                <h3 style="margin-bottom: 10px;">🍁 Welcome to Jay's Toronto Guide! 🍁</h3>
-                <p style="font-size: 14px; line-height: 1.8;">
-                    This guide works <strong>year-round</strong> - just check current hours & prices before you go!<br>
-                    💻 <strong>Desktop:</strong> Click any stop to zoom on map<br>
-                    📱 <strong>Mobile:</strong> Tap stops to auto-scroll to map<br>
-                    🗺️ Interactive map shows every detail of your journey<br><br>
-                    <strong>Have an incredible Toronto adventure! 🎉</strong>
+            <div style="text-align: center; margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);">
+                <h3 style="margin-bottom: 15px; font-size: 22px;">🍁 Welcome to Jay's Toronto Guide! 🍁</h3>
+                <p style="font-size: 14px; line-height: 2; margin-bottom: 15px;">
+                    <strong>Your perfect Toronto adventure starts here!</strong><br>
+                    This guide works <strong>year-round</strong> with up-to-date info.<br><br>
+                    
+                    <strong>🎯 NEW FEATURES:</strong><br>
+                    📍 Tap any location to open in your phone's maps app<br>
+                    🧭 Get walking directions between stops<br>
+                    ✅ Track your progress with interactive checkpoints<br>
+                    📤 Share this guide with friends & family<br>
+                    🖨️ Print or save as PDF for offline use<br><br>
+                    
+                    <strong>💻 Desktop:</strong> Click stops to zoom on map<br>
+                    <strong>📱 Mobile:</strong> Tap stops to navigate instantly<br>
+                    <strong>🗺️ Map:</strong> Pinch to zoom, tap routes for details<br><br>
+                    
+                    <strong style="font-size: 16px;">Have an unforgettable Toronto adventure! 🎉</strong>
                 </p>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); font-size: 12px; opacity: 0.9;">
+                    Made with ❤️ for Toronto explorers | Cross-platform compatible | Works on iOS, Android & Desktop
+                </div>
             </div>
         </div>
 
@@ -1137,6 +1455,51 @@
         };
         legend.addTo(map);
 
+        // Cross-platform maps integration
+        window.openInMaps = function(lat, lng, name) {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const encodedName = encodeURIComponent(name);
+            
+            // Detect iOS
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                // Try Apple Maps first
+                window.location.href = `maps://maps.apple.com/?q=${encodedName}&ll=${lat},${lng}`;
+                // Fallback to Google Maps if Apple Maps doesn't open
+                setTimeout(() => {
+                    window.open(`https://maps.google.com/?q=${lat},${lng}`, '_blank');
+                }, 500);
+            }
+            // Detect Android
+            else if (/android/i.test(userAgent)) {
+                window.location.href = `geo:${lat},${lng}?q=${lat},${lng}(${encodedName})`;
+            }
+            // Desktop or other devices
+            else {
+                window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${encodedName}`, '_blank');
+            }
+        };
+
+        // Get directions between two points
+        window.getDirections = function(fromLat, fromLng, toLat, toLng) {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // Detect iOS
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                window.location.href = `maps://maps.apple.com/?saddr=${fromLat},${fromLng}&daddr=${toLat},${toLng}&dirflg=w`;
+                setTimeout(() => {
+                    window.open(`https://www.google.com/maps/dir/${fromLat},${fromLng}/${toLat},${toLng}`, '_blank');
+                }, 500);
+            }
+            // Detect Android
+            else if (/android/i.test(userAgent)) {
+                window.location.href = `google.navigation:q=${toLat},${toLng}`;
+            }
+            // Desktop or other devices
+            else {
+                window.open(`https://www.google.com/maps/dir/${fromLat},${fromLng}/${toLat},${toLng}`, '_blank');
+            }
+        };
+
         // Focus function with responsive zoom
         window.focusOnMap = function(num) {
             const marker = markers[num];
@@ -1212,6 +1575,97 @@
                 }
             });
         }
+
+        // Progress tracker functionality
+        let completedStops = new Set();
+        
+        window.toggleCheckpoint = function(stopNum) {
+            const checkpoint = document.querySelector(`[data-stop="${stopNum}"]`);
+            if (completedStops.has(stopNum)) {
+                completedStops.delete(stopNum);
+                checkpoint.classList.remove('completed');
+            } else {
+                completedStops.add(stopNum);
+                checkpoint.classList.add('completed');
+            }
+            updateProgress();
+        };
+
+        function updateProgress() {
+            const total = 10;
+            const completed = completedStops.size;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `${completed} of ${total} stops completed`;
+            document.getElementById('progress-percent').textContent = Math.round(percentage) + '%';
+            
+            // Celebration animation when all completed
+            if (completed === total) {
+                confetti();
+            }
+        }
+
+        // Simple confetti effect
+        function confetti() {
+            const text = document.getElementById('progress-text');
+            text.textContent = '🎉 Amazing! You completed Jay\'s Toronto Guide! 🎉';
+            text.style.color = '#667eea';
+            text.style.fontWeight = 'bold';
+        }
+
+        // Share functionality
+        window.shareGuide = async function() {
+            const shareData = {
+                title: 'Jay\'s Toronto Guide',
+                text: 'Check out this amazing Toronto day trip guide with interactive maps and directions!',
+                url: window.location.href
+            };
+            
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    // Fallback: copy to clipboard
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert('✅ Link copied to clipboard! Share it with your friends!');
+                }
+            } catch (err) {
+                console.log('Share failed:', err);
+            }
+        };
+
+        // Download for offline use
+        window.downloadOffline = function() {
+            alert('📥 Offline Mode Tips:\n\n1. Use your browser\'s "Save Page As" to download this guide\n2. Take screenshots of the map for offline reference\n3. Download Google Maps offline area for Toronto\n4. Save key addresses in your phone\'s notes\n\nOr simply print this page to PDF using the Print button!');
+        };
+
+        // Load saved progress from localStorage (browser-dependent)
+        // Note: Progress saving works when page is saved/bookmarked locally
+        try {
+            const saved = localStorage.getItem('torontoGuideProgress');
+            if (saved) {
+                const savedStops = JSON.parse(saved);
+                savedStops.forEach(stop => {
+                    completedStops.add(stop);
+                    const checkpoint = document.querySelector(`[data-stop="${stop}"]`);
+                    if (checkpoint) checkpoint.classList.add('completed');
+                });
+                updateProgress();
+            }
+        } catch (e) {
+            // localStorage not available in this environment
+            console.log('Progress saving unavailable in artifact view. Save page locally to enable.');
+        }
+
+        // Save progress when checkpoints change
+        window.addEventListener('beforeunload', function() {
+            try {
+                localStorage.setItem('torontoGuideProgress', JSON.stringify([...completedStops]));
+            } catch (e) {
+                // localStorage not available
+            }
+        });
     </script>
 </body>
 </html>
