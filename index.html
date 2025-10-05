@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toronto One-Day Adventure - Oct 5, 2025</title>
+    <title>Jay's Toronto Guide - Perfect Day Trip</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
     <style>
@@ -451,42 +451,59 @@
             font-weight: bold;
         }
         @media print {
-            body { background: white; }
-            .container { display: block; }
+            body { background: white; padding: 0; }
+            .container { 
+                display: block; 
+                max-width: 100%;
+            }
             #map { display: none; }
+            .itinerary-panel {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            .step {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .date-badge, .summary {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="itinerary-panel">
-            <h1>🍁 Toronto One-Day Adventure</h1>
-            <div class="date-badge">📅 Sunday, October 5, 2025</div>
+            <h1>🍁 Jay's Toronto Guide</h1>
+            <div class="date-badge">🎯 The Ultimate One-Day Adventure</div>
             
             <div class="alert">
-                <strong>🎉 TODAY'S SPECIALS!</strong><br>
-                • <span class="highlight">ROM Main Floor = FREE</span> (Oct 1-Nov 30)<br>
-                • <span class="highlight">Last Day of Oktoberfest</span> at Distillery (12-9pm, $10 festbier!)
+                <strong>💡 Before You Go:</strong><br>
+                • Check attraction websites for <span class="highlight">current hours & prices</span><br>
+                • Book tickets online in advance to <span class="highlight">skip lines</span><br>
+                • ROM often has free admission days - <span class="highlight">check their calendar</span><br>
+                • Distillery District hosts seasonal events year-round
             </div>
 
             <div class="summary">
-                <h2>📊 Day Summary</h2>
+                <h2>📊 Trip at a Glance</h2>
                 <div class="summary-grid">
                     <div class="summary-item">
-                        <strong>⏱️ Total Time</strong>
-                        10:00 AM - 8:30 PM
+                        <strong>⏱️ Duration</strong>
+                        8-10 hours (Full Day)
                     </div>
                     <div class="summary-item">
-                        <strong>💰 Est. Cost</strong>
-                        $75-95 CAD
+                        <strong>💰 Budget</strong>
+                        $70-120 CAD
                     </div>
                     <div class="summary-item">
                         <strong>🚶 Walking</strong>
-                        ~4 km total
+                        ~4-5 km total
                     </div>
                     <div class="summary-item">
-                        <strong>🚇 TTC Rides</strong>
-                        2-3 rides ($3.35 each)
+                        <strong>🚇 TTC</strong>
+                        2-3 rides needed
                     </div>
                 </div>
             </div>
@@ -494,15 +511,16 @@
             <!-- STOP 1 -->
             <div class="step" onclick="focusOnMap(1)">
                 <div class="step-number">1</div>
-                <div class="step-time">⏰ 10:00 - 11:00 AM</div>
+                <div class="step-time">⏰ Start: 10:00 AM</div>
                 <h3>🗼 CN Tower</h3>
                 <div class="step-details">
                     <span class="duration">⏱️ 60 min</span>
-                    <span class="cost">💰 $45 CAD</span>
+                    <span class="cost">💰 $40-50 CAD</span>
                     <p><strong>📍 290 Bremner Blvd</strong></p>
-                    <p>Start your day at Canada's iconic landmark! Take the glass elevator to 346m high Main Observation Level. Walk on the Glass Floor if you dare!</p>
+                    <p><strong>Hours:</strong> Daily 9am-10pm (varies seasonally)</p>
+                    <p>Start at Canada's iconic 553m landmark! Glass elevator to Main Observation Level (346m). Walk on the Glass Floor if you dare!</p>
                     <div class="tip">
-                        💡 <strong>Pro Tip:</strong> Buy tickets online NOW to skip lines. Best time = before 11am. Look for Niagara Falls on clear days!
+                        💡 <strong>Pro Tips:</strong> Buy tickets online to skip lines. Before 11am is least crowded. On clear days, see Niagara Falls! CityPASS saves 38% if visiting multiple attractions.
                     </div>
                 </div>
             </div>
@@ -510,15 +528,16 @@
             <!-- STOP 2 -->
             <div class="step" onclick="focusOnMap(2)">
                 <div class="step-number">2</div>
-                <div class="step-time">⏰ 11:00 - 12:15 PM</div>
+                <div class="step-time">⏰ 11:00 AM</div>
                 <h3>🐠 Ripley's Aquarium</h3>
                 <div class="step-details">
-                    <span class="duration">⏱️ 75 min</span>
-                    <span class="cost">💰 $35-40 CAD</span>
+                    <span class="duration">⏱️ 60-90 min</span>
+                    <span class="cost">💰 $35-45 CAD</span>
                     <p><strong>📍 288 Bremner Blvd (2 min walk)</strong></p>
-                    <p>Walk 2 minutes to explore 20,000+ aquatic animals. Don't miss the Dangerous Lagoon tunnel with sharks swimming overhead!</p>
+                    <p><strong>Hours:</strong> Daily 9am-9pm</p>
+                    <p>20,000+ aquatic animals across 9 galleries. Dangerous Lagoon underwater tunnel is breathtaking - sharks and rays swim overhead!</p>
                     <div class="tip">
-                        💡 <strong>Pro Tip:</strong> "Sea The Sky" combo ticket saves money if you book CN Tower + Aquarium together online.
+                        💡 <strong>Pro Tip:</strong> "Sea The Sky" combo with CN Tower saves money. Visit before 11am or after 4pm to avoid crowds. Touch exhibits include stingrays!
                     </div>
                 </div>
             </div>
@@ -526,13 +545,13 @@
             <!-- STOP 3 -->
             <div class="step" onclick="focusOnMap(3)">
                 <div class="step-number">3</div>
-                <div class="step-time">⏰ 12:15 - 12:30 PM</div>
+                <div class="step-time">⏰ 12:15 PM</div>
                 <h3>🚶 Walk to Union Station</h3>
                 <div class="step-details">
                     <span class="duration">⏱️ 8 min walk (600m)</span>
-                    <p>Head northeast on Bremner Blvd, turn right on York St, walk to Front St W.</p>
+                    <p>Head northeast on Bremner Blvd, right on York St, walk to Front St W.</p>
                     <div class="food-stop">
-                        🍕 <strong>Quick Snack:</strong> Grab coffee at Union Station's food court or walk through the PATH underground for options.
+                        🍕 <strong>Quick Options:</strong> Union Station food court has everything from coffee to full meals. PATH underground system connects to dozens of restaurants.
                     </div>
                 </div>
             </div>
@@ -540,21 +559,23 @@
             <!-- STOP 4 -->
             <div class="step" onclick="focusOnMap(4)">
                 <div class="step-number">4</div>
-                <div class="step-time">⏰ 12:30 - 1:30 PM</div>
+                <div class="step-time">⏰ 12:30 PM</div>
                 <h3>🥖 St. Lawrence Market</h3>
                 <div class="step-details">
-                    <span class="duration">⏱️ 60 min</span>
-                    <span class="cost">💰 $15-20 for lunch</span>
+                    <span class="duration">⏱️ 60-90 min</span>
+                    <span class="cost">💰 $15-25 lunch</span>
                     <p><strong>📍 92-95 Front St E (10 min walk, 850m)</strong></p>
-                    <p>Walk east on Front St. World's best food market (National Geographic, 2012)!</p>
+                    <p><strong>Hours:</strong> Tue-Thu 9am-7pm, Fri 9am-7pm, Sat 7am-5pm, Sun 10am-5pm (Closed Mondays)</p>
+                    <p>Walk east on Front St. World's best food market per National Geographic! Over 100 vendors.</p>
                     <div class="food-stop">
-                        🥪 <strong>MUST EAT:</strong><br>
-                        • <strong>Carousel Bakery</strong> - Famous peameal bacon sandwich ($8-10)<br>
-                        • <strong>Mike's Fish Market</strong> - Fresh oysters & steamed lobster (sit & eat!)<br>
-                        • Browse 100+ vendors for cheeses, baked goods, international foods
+                        🥪 <strong>MUST TRY:</strong><br>
+                        • <strong>Carousel Bakery</strong> - Legendary peameal bacon sandwich ($8-12)<br>
+                        • <strong>Mike's Fish Market</strong> - Fresh oysters, steamed lobster (eat on-site!)<br>
+                        • Artisan cheeses, international cuisine, baked goods<br>
+                        • Farmers Market on Saturdays (5am-3pm)
                     </div>
                     <div class="tip">
-                        💡 Open 10am-5pm Sundays. Lower level has great artisan vendors!
+                        💡 Lower level has unique artisan vendors and gifts. Arrive hungry!
                     </div>
                 </div>
             </div>
@@ -562,20 +583,30 @@
             <!-- STOP 5 -->
             <div class="step" onclick="focusOnMap(5)">
                 <div class="step-number">5</div>
-                <div class="step-time">⏰ 1:45 - 3:15 PM</div>
+                <div class="step-time">⏰ 2:00 PM</div>
                 <h3>🎨 Distillery Historic District</h3>
                 <div class="step-details">
-                    <span class="duration">⏱️ 90 min</span>
-                    <span class="cost">💰 FREE entry + $10-15 for drinks</span>
+                    <span class="duration">⏱️ 60-90 min</span>
+                    <span class="cost">💰 FREE entry</span>
                     <p><strong>📍 55 Mill St (10 min walk, 750m)</strong></p>
-                    <p>Walk south on Parliament St, then east on Mill St. Pedestrian-only Victorian industrial village.</p>
-                    <div class="alert" style="background: #fff3cd;">
-                        <strong>🍺 OKTOBERFEST - LAST DAY!</strong><br>
-                        Mill Street Brewpub Courtyard: $10 Festbier, German bites, live music 12-9pm. Get a souvenir stein for $8!
+                    <p><strong>Hours:</strong> Mon-Thu 10am-8pm, Fri-Sat 10am-9pm, Sun 11am-8pm</p>
+                    <p>Walk south on Parliament St, then east on Mill St. Pedestrian-only Victorian industrial village with cobblestone streets, art galleries, boutiques, cafes.</p>
+                    <div class="alert" style="background: #e3f2fd; border-color: #2196f3;">
+                        <strong>🎉 Year-Round Events:</strong><br>
+                        • Winter: Famous Christmas Market (Nov-Dec)<br>
+                        • Spring/Summer: Art shows, food festivals, live music<br>
+                        • Fall: Oktoberfest, Halloween festivities<br>
+                        Check website for current events!
                     </div>
                     <div class="food-stop">
-                        ☕ <strong>Balzac's Coffee</strong> - Perfect for afternoon pick-me-up<br>
-                        🍺 <strong>Mill Street Brewpub</strong> - Oktoberfest fun!
+                        ☕ <strong>Food & Drink:</strong><br>
+                        • <strong>Balzac's Coffee</strong> - Perfect afternoon pick-me-up<br>
+                        • <strong>Mill Street Brewpub</strong> - Local craft beer & pub food<br>
+                        • <strong>El Catrin</strong> - Mexican restaurant<br>
+                        • Dozens of cafes, restaurants, chocolatiers
+                    </div>
+                    <div class="tip">
+                        💡 Great for photos! Historic red brick buildings. Open 364 days/year.
                     </div>
                 </div>
             </div>
@@ -583,20 +614,20 @@
             <!-- STOP 6 -->
             <div class="step" onclick="focusOnMap(6)">
                 <div class="step-number">6</div>
-                <div class="step-time">⏰ 3:30 - 3:50 PM</div>
+                <div class="step-time">⏰ 3:30 PM</div>
                 <h3>🚇 TTC to ROM</h3>
                 <div class="step-details">
                     <span class="duration">⏱️ 20 min total</span>
-                    <span class="cost">💰 $3.35</span>
+                    <span class="cost">💰 $3.35 per ride</span>
                     <div class="transit">
                         🚊 <strong>Route:</strong><br>
                         1. Walk 5 min west to <strong>King Station</strong> (Parliament & King)<br>
                         2. Take <strong>Line 1 (Yellow) NORTHBOUND</strong><br>
-                        3. Ride 5 stops (8 min) to <strong>Museum Station</strong><br>
+                        3. Ride 5 stops (~8 min) to <strong>Museum Station</strong><br>
                         4. Exit at Museum - ROM is across the street!
                     </div>
                     <div class="tip">
-                        💡 Buy PRESTO card or use contactless payment. Keep your receipt for transfers!
+                        💡 <strong>TTC Payment:</strong> PRESTO card ($6 card + funds), contactless credit/debit, or tokens. Day Pass $13.50 (unlimited rides). Keep receipt for transfers!
                     </div>
                 </div>
             </div>
@@ -604,19 +635,22 @@
             <!-- STOP 7 -->
             <div class="step" onclick="focusOnMap(7)">
                 <div class="step-number">7</div>
-                <div class="step-time">⏰ 3:50 - 5:00 PM</div>
+                <div class="step-time">⏰ 3:50 PM</div>
                 <h3>🦕 Royal Ontario Museum (ROM)</h3>
                 <div class="step-details">
-                    <span class="duration">⏱️ 70 min</span>
-                    <span class="cost">💰 FREE (Main Floor)</span>
+                    <span class="duration">⏱️ 60-90 min</span>
+                    <span class="cost">💰 $20-30 CAD (varies)</span>
                     <p><strong>📍 100 Queen's Park</strong></p>
+                    <p><strong>Hours:</strong> Tue-Sun 10am-5:30pm, closed Mondays (except holidays)</p>
                     <div class="alert" style="background: #d4edda; border-color: #28a745;">
-                        <strong>🎉 FREE MAIN FLOOR ACCESS!</strong><br>
-                        Oct 1-Nov 30 program includes ground floor galleries. Book free ticket online in advance!
+                        <strong>💰 FREE ADMISSION OPTIONS:</strong><br>
+                        • Free main floor (seasonal programs - check website)<br>
+                        • 3rd Tuesday Nights Free (5:30-8:30pm monthly)<br>
+                        • Full-time students with Canadian ID: Free Tuesdays
                     </div>
-                    <p>World-class museum with 18M+ objects. See dinosaurs, mummies, Chinese architecture, Indigenous artifacts!</p>
+                    <p>One of North America's largest museums! 18M+ objects: dinosaurs, mummies, Chinese architecture, Indigenous artifacts, gems & minerals, natural history.</p>
                     <div class="tip">
-                        💡 Closes 5:30pm. Focus on main floor highlights. Full admission ~$25 if you want all floors.
+                        💡 <strong>Tips:</strong> Buy tickets online for "Plan Ahead Pricing" discounts. Allow 2-3 hours for full visit. ROM membership (~$75) pays for itself in 3 visits!
                     </div>
                 </div>
             </div>
@@ -682,17 +716,51 @@
             </div>
 
             <div class="summary">
-                <h2>📝 Important Notes</h2>
-                <p><strong>🌡️ Weather:</strong> October = 10-15°C. Bring layers & comfy shoes!</p>
-                <p><strong>🎫 Book Ahead:</strong> CN Tower, Ripley's, ROM free ticket</p>
-                <p><strong>💳 Payment:</strong> Most places take card. Some market vendors cash only.</p>
-                <p><strong>📱 Apps:</strong> TTC app, Google Maps, ROM app</p>
-                <p><strong>🚽 Facilities:</strong> All attractions have restrooms. Public ones at Union Station, Eaton Centre.</p>
+                <h2>📝 Essential Information</h2>
+                <p><strong>🌡️ Weather by Season:</strong></p>
+                <p>• <strong>Winter (Dec-Feb):</strong> -5 to 0°C. Bundle up! Ice skating, holiday markets<br>
+                • <strong>Spring (Mar-May):</strong> 5-15°C. Layers needed. Cherry blossoms in April<br>
+                • <strong>Summer (Jun-Aug):</strong> 20-30°C. Sunny & humid. Festivals galore!<br>
+                • <strong>Fall (Sep-Nov):</strong> 10-20°C. Perfect weather. Fall colors peak in October</p>
+                
+                <p><strong>💳 Money Matters:</strong></p>
+                <p>• Most places accept credit/debit cards<br>
+                • St. Lawrence Market & Kensington: some vendors cash only<br>
+                • ATMs widely available<br>
+                • Tipping: 15-20% at restaurants, $1-2 for coffee</p>
+                
+                <p><strong>🎫 Advance Booking:</strong></p>
+                <p>• CN Tower & Ripley's: Book online to skip lines<br>
+                • ROM: Check for free admission days & book timed tickets<br>
+                • Toronto CityPASS: Save 38% on 5 top attractions ($88 adult, $59 child)</p>
+                
+                <p><strong>📱 Essential Apps:</strong></p>
+                <p>• <strong>TTC (Transit Toronto):</strong> Live transit times<br>
+                • <strong>Google Maps:</strong> Navigation & transit directions<br>
+                • <strong>ROM/CN Tower Apps:</strong> Interactive guides<br>
+                • <strong>Uber/Lyft:</strong> Rideshare options</p>
+                
+                <p><strong>🚽 Facilities:</strong></p>
+                <p>• All attractions have clean restrooms<br>
+                • Public washrooms: Union Station, Eaton Centre, Harbourfront<br>
+                • Most restaurants/cafes welcome customers</p>
+                
+                <p><strong>🎯 Best Days to Visit:</strong></p>
+                <p>• Weekdays less crowded at attractions<br>
+                • Saturday: St. Lawrence Farmers Market (5am-3pm)<br>
+                • Sunday: Some shops close early, check hours<br>
+                • Avoid: Canadian holidays (busier & some closures)</p>
             </div>
 
-            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
-                <h3 style="color: #667eea; margin-bottom: 10px;">Have an Amazing Day in Toronto! 🍁</h3>
-                <p style="font-size: 14px; color: #666;">Click any stop above to focus on it on the map!</p>
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px;">
+                <h3 style="margin-bottom: 10px;">🍁 Welcome to Jay's Toronto Guide! 🍁</h3>
+                <p style="font-size: 14px; line-height: 1.8;">
+                    This guide works <strong>year-round</strong> - just check current hours & prices before you go!<br>
+                    💻 <strong>Desktop:</strong> Click any stop to zoom on map<br>
+                    📱 <strong>Mobile:</strong> Tap stops to auto-scroll to map<br>
+                    🗺️ Interactive map shows every detail of your journey<br><br>
+                    <strong>Have an incredible Toronto adventure! 🎉</strong>
+                </p>
             </div>
         </div>
 
@@ -742,52 +810,52 @@
             { 
                 num: 1, name: "CN Tower", lat: 43.6426, lng: -79.3871, 
                 color: "#667eea", time: "10:00 AM", 
-                info: "Start here! 553m tall. Glass floor at 342m. Amazing views!"
+                info: "Canada's icon! 553m tall, glass floor, 360° views. Book ahead online!"
             },
             { 
                 num: 2, name: "Ripley's Aquarium", lat: 43.6424, lng: -79.3860, 
                 color: "#1e88e5", time: "11:00 AM",
-                info: "20,000 aquatic animals. Dangerous Lagoon tunnel is incredible!"
+                info: "20,000 aquatic animals. Underwater tunnel is breathtaking!"
             },
             { 
                 num: 3, name: "Union Station", lat: 43.6456, lng: -79.3804, 
                 color: "#43a047", time: "12:15 PM",
-                info: "Historic train station. Food court & PATH underground mall."
+                info: "Historic transit hub. Food court & PATH underground mall."
             },
             { 
                 num: 4, name: "St. Lawrence Market", lat: 43.6487, lng: -79.3715, 
                 color: "#fb8c00", time: "12:30 PM",
-                info: "World's best food market! Get the peameal bacon sandwich!"
+                info: "World's best food market! Famous peameal bacon sandwich!"
             },
             { 
                 num: 5, name: "Distillery District", lat: 43.6503, lng: -79.3596, 
-                color: "#e53935", time: "1:45 PM",
-                info: "Victorian industrial area. LAST DAY of Oktoberfest today!"
+                color: "#e53935", time: "2:00 PM",
+                info: "Victorian industrial village. Year-round events & great food!"
             },
             { 
                 num: 6, name: "King Station", lat: 43.6490, lng: -79.3778, 
                 color: "#00897b", time: "3:30 PM",
-                info: "TTC Line 1 (Yellow). Take northbound to Museum.", isTransit: true
+                info: "TTC Line 1 (Yellow) northbound to Museum Station.", isTransit: true
             },
             { 
                 num: 7, name: "Royal Ontario Museum", lat: 43.6677, lng: -79.3948, 
                 color: "#8e24aa", time: "3:50 PM",
-                info: "FREE main floor today! 18M+ artifacts. Closes 5:30pm."
+                info: "18M+ artifacts! Dinosaurs, mummies, gems. Check for free days!"
             },
             { 
                 num: 8, name: "Kensington Market", lat: 43.6540, lng: -79.4022, 
                 color: "#d81b60", time: "5:00 PM",
-                info: "Bohemian neighborhood. Best fish tacos at Seven Lives!"
+                info: "Bohemian neighborhood. Best tacos, vintage shops, street art!"
             },
             { 
                 num: 9, name: "Nathan Phillips Square", lat: 43.6525, lng: -79.3839, 
                 color: "#5e35b1", time: "6:15 PM",
-                info: "TORONTO sign here! City Hall. Great photo spot!"
+                info: "TORONTO sign! City Hall. Ice skating in winter!"
             },
             { 
                 num: 10, name: "Canoe Landing Park", lat: 43.6377, lng: -79.3971, 
                 color: "#00acc1", time: "7:30 PM",
-                info: "Sunset views of CN Tower. Red canoe sculptures."
+                info: "Waterfront views. Red canoe sculptures. Peaceful ending!"
             }
         ];
 
@@ -980,61 +1048,170 @@
             </div>
         `).addTo(map);
 
-        // Enhanced legend
+        // Enhanced legend with mobile toggle
         const legend = L.control({position: 'topright'});
         legend.onAdd = function() {
             const div = L.DomUtil.create('div', 'map-legend');
-            div.innerHTML = `
-                <h4>🗺️ Your Toronto Journey</h4>
-                <div class="legend-item">
-                    <div class="legend-icon" style="background: #667eea;">1-2</div>
-                    <span>Morning (10am-12pm)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-icon" style="background: #fb8c00;">3-5</div>
-                    <span>Lunch & Culture (12-4pm)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-icon" style="background: #8e24aa;">6-7</div>
-                    <span>TTC + Museum (4-5pm)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-icon" style="background: #d81b60;">8-9</div>
-                    <span>Evening (5-7pm)</span>
-                </div>
-                <hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">
-                <div class="legend-item">
-                    <div class="legend-line" style="background: #667eea; border: 2px dashed #667eea;"></div>
-                    <span>Walking Route</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-line" style="background: #00897b;"></div>
-                    <span>TTC Subway</span>
-                </div>
-                <div class="legend-item">
-                    <span style="margin-right: 10px;">Ⓜ️</span>
-                    <span>Metro Station</span>
-                </div>
-            `;
+            const isMobile = window.innerWidth < 768;
+            
+            if (isMobile) {
+                div.style.cursor = 'pointer';
+                let isExpanded = false;
+                
+                const updateContent = () => {
+                    if (isExpanded) {
+                        div.innerHTML = `
+                            <h4>🗺️ Jay's Toronto Guide <span style="float: right;">▼</span></h4>
+                            <div class="legend-item">
+                                <div class="legend-icon" style="background: #667eea;">1-2</div>
+                                <span>Morning</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-icon" style="background: #fb8c00;">3-5</div>
+                                <span>Markets</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-icon" style="background: #8e24aa;">6-7</div>
+                                <span>Museum</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-icon" style="background: #d81b60;">8-9</div>
+                                <span>Evening</span>
+                            </div>
+                            <hr style="margin: 8px 0; border: none; border-top: 1px solid #ddd;">
+                            <div class="legend-item">
+                                <div class="legend-line" style="background: #667eea; border: 2px dashed #667eea;"></div>
+                                <span>Walk</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-line" style="background: #00897b;"></div>
+                                <span>Subway</span>
+                            </div>
+                        `;
+                    } else {
+                        div.innerHTML = `<h4>🗺️ Legend <span style="float: right;">▶</span></h4>`;
+                    }
+                };
+                
+                updateContent();
+                
+                div.onclick = function() {
+                    isExpanded = !isExpanded;
+                    updateContent();
+                };
+            } else {
+                div.innerHTML = `
+                    <h4>🗺️ Jay's Toronto Guide</h4>
+                    <div class="legend-item">
+                        <div class="legend-icon" style="background: #667eea;">1-2</div>
+                        <span>Morning Attractions</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-icon" style="background: #fb8c00;">3-5</div>
+                        <span>Lunch & Markets</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-icon" style="background: #8e24aa;">6-7</div>
+                        <span>Transit & Museum</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-icon" style="background: #d81b60;">8-9</div>
+                        <span>Evening Exploration</span>
+                    </div>
+                    <hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #667eea; border: 2px dashed #667eea;"></div>
+                        <span>Walking Route</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #00897b;"></div>
+                        <span>TTC Subway</span>
+                    </div>
+                    <div class="legend-item">
+                        <span style="margin-right: 10px;">Ⓜ️</span>
+                        <span>Metro Station</span>
+                    </div>
+                `;
+            }
             return div;
         };
         legend.addTo(map);
 
-        // Focus function
+        // Focus function with responsive zoom
         window.focusOnMap = function(num) {
             const marker = markers[num];
             if (marker) {
-                map.setView(marker.getLatLng(), 16, { animate: true });
-                marker.openPopup();
+                const isMobile = window.innerWidth < 768;
+                const zoomLevel = isMobile ? 15 : 16;
+                map.setView(marker.getLatLng(), zoomLevel, { 
+                    animate: true,
+                    duration: 0.8
+                });
+                setTimeout(() => marker.openPopup(), 500);
+                
+                // Scroll to map on mobile
+                if (isMobile) {
+                    document.getElementById('map').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                }
             }
         };
 
-        // Add scale
-        L.control.scale({ imperial: false, metric: true }).addTo(map);
+        // Add scale (responsive position)
+        const scalePosition = window.innerWidth < 768 ? 'bottomleft' : 'bottomleft';
+        L.control.scale({ 
+            imperial: false, 
+            metric: true,
+            position: scalePosition,
+            maxWidth: window.innerWidth < 768 ? 100 : 150
+        }).addTo(map);
 
-        // Fit all markers on load
+        // Add recenter button for mobile
+        if (window.innerWidth < 768) {
+            const recenterControl = L.control({ position: 'topleft' });
+            recenterControl.onAdd = function() {
+                const button = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+                button.innerHTML = '<a href="#" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; font-size: 20px; text-decoration: none; background: white; color: #667eea;" title="Recenter map">🎯</a>';
+                button.onclick = function(e) {
+                    e.preventDefault();
+                    map.fitBounds(bounds, { padding: [30, 30], animate: true });
+                };
+                return button;
+            };
+            recenterControl.addTo(map);
+        }
+
+        // Fit all markers on load with responsive padding
         const bounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
-        map.fitBounds(bounds, { padding: [50, 50] });
+        const padding = window.innerWidth < 768 ? [30, 30] : [50, 50];
+        map.fitBounds(bounds, { padding: padding });
+
+        // Handle window resize
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                map.invalidateSize();
+                const newPadding = window.innerWidth < 768 ? [30, 30] : [50, 50];
+                map.fitBounds(bounds, { padding: newPadding });
+            }, 250);
+        });
+
+        // Disable scroll zoom on mobile to prevent accidental zooming
+        if (window.innerWidth < 768) {
+            map.scrollWheelZoom.disable();
+            // Enable zoom on click
+            map.on('click', function() {
+                if (!map.scrollWheelZoom.enabled()) {
+                    map.scrollWheelZoom.enable();
+                    setTimeout(() => {
+                        map.scrollWheelZoom.disable();
+                    }, 3000);
+                }
+            });
+        }
     </script>
 </body>
 </html>
