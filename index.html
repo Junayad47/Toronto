@@ -32,9 +32,11 @@
             padding: 15px 25px;
             border-radius: 20px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            z-index: 1000;
+            z-index: 10000;
             display: none;
-            max-width: 90%;
+            max-width: calc(100% - 40px);
+            width: auto;
+            min-width: 300px;
             animation: slideUp 0.3s ease;
         }
         @keyframes slideUp {
@@ -48,10 +50,12 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            flex-wrap: nowrap;
         }
         .nav-icon {
             font-size: 32px;
             animation: pulse-icon 2s infinite;
+            flex-shrink: 0;
         }
         @keyframes pulse-icon {
             0%, 100% { transform: scale(1); }
@@ -59,6 +63,7 @@
         }
         .nav-info {
             flex: 1;
+            min-width: 150px;
         }
         .nav-distance {
             font-size: 20px;
@@ -74,6 +79,7 @@
         .nav-buttons {
             display: flex;
             gap: 10px;
+            flex-shrink: 0;
         }
         .nav-btn {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -85,6 +91,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
         .nav-btn:hover {
             transform: scale(1.05);
@@ -94,9 +101,9 @@
         }
         .location-controls {
             position: fixed;
-            bottom: 120px;
+            bottom: 30px;
             right: 20px;
-            z-index: 1000;
+            z-index: 9999;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -106,36 +113,52 @@
             height: 50px;
             border-radius: 50%;
             background: white;
-            border: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 2px solid #e0e0e0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
             transition: all 0.3s ease;
         }
         .location-btn:hover {
             transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+        .location-btn:active {
+            transform: scale(0.95);
         }
         .location-btn.active {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            border-color: #667eea;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 4px 20px rgba(102, 126, 234, 0.8); }
         }
         .weather-widget {
             position: fixed;
-            top: 80px;
+            top: 20px;
             right: 20px;
             background: white;
             padding: 15px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 1000;
+            z-index: 9998;
             min-width: 150px;
             display: none;
+            border: 2px solid #e0e0e0;
         }
         .weather-widget.show {
             display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .photo-gallery {
             display: flex;
@@ -143,6 +166,19 @@
             overflow-x: auto;
             margin: 15px 0;
             padding: 5px 0;
+            scrollbar-width: thin;
+            scrollbar-color: #667eea #f0f0f0;
+        }
+        .photo-gallery::-webkit-scrollbar {
+            height: 8px;
+        }
+        .photo-gallery::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+        .photo-gallery::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
         }
         .photo-thumb {
             width: 100px;
@@ -157,18 +193,19 @@
             transform: scale(1.05);
         }
         .direction-indicator {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 80px;
             height: 80px;
             pointer-events: none;
-            z-index: 500;
+            z-index: 9997;
             display: none;
         }
         .direction-indicator.active {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
         .direction-arrow {
             width: 100%;
@@ -211,13 +248,15 @@
             padding: 15px 30px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            z-index: 2000;
+            z-index: 10001;
             display: none;
             animation: toastSlide 0.3s ease;
+            max-width: calc(100% - 40px);
+            text-align: center;
         }
         @keyframes toastSlide {
-            from { top: -100px; }
-            to { top: 20px; }
+            from { top: -100px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
         }
         .toast.show {
             display: block;
@@ -225,35 +264,92 @@
         @media (max-width: 768px) {
             .navigation-panel {
                 bottom: 10px;
-                padding: 12px 15px;
-                max-width: 95%;
+                padding: 15px;
+                max-width: calc(100% - 20px);
+                min-width: auto;
+                width: calc(100% - 20px);
             }
             .nav-content {
                 flex-direction: column;
-                gap: 10px;
+                gap: 12px;
+                align-items: stretch;
+            }
+            .nav-info {
+                text-align: center;
             }
             .nav-buttons {
                 width: 100%;
+                flex-direction: row;
             }
             .nav-btn {
                 flex: 1;
                 padding: 12px;
+                font-size: 13px;
             }
             .location-controls {
-                bottom: 90px;
+                bottom: 20px;
                 right: 10px;
+                gap: 8px;
             }
             .location-btn {
-                width: 45px;
-                height: 45px;
+                width: 48px;
+                height: 48px;
                 font-size: 20px;
             }
             .weather-widget {
-                top: 70px;
+                top: 10px;
                 right: 10px;
                 font-size: 12px;
-                min-width: 120px;
+                min-width: 130px;
+                padding: 12px;
+            }
+            .direction-indicator {
+                width: 60px;
+                height: 60px;
+            }
+            .toast {
+                font-size: 14px;
+                padding: 12px 20px;
+            }
+        }
+        @media (max-width: 480px) {
+            .navigation-panel {
+                bottom: 5px;
+                padding: 12px;
+            }
+            .nav-icon {
+                font-size: 28px;
+            }
+            .nav-distance {
+                font-size: 18px;
+            }
+            .nav-time {
+                font-size: 13px;
+            }
+            .nav-btn {
                 padding: 10px;
+                font-size: 12px;
+            }
+            .location-controls {
+                bottom: 15px;
+                right: 8px;
+                gap: 6px;
+            }
+            .location-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+        }
+        /* Ensure map doesn't go under controls */
+        .leaflet-bottom.leaflet-right {
+            margin-right: 80px !important;
+            margin-bottom: 20px !important;
+        }
+        @media (max-width: 768px) {
+            .leaflet-bottom.leaflet-right {
+                margin-right: 70px !important;
+                margin-bottom: 100px !important;
             }
         }
         .route-options {
@@ -1467,13 +1563,42 @@
     </div>
 
     <script>
-        // Initialize map
-        const map = L.map('map').setView([43.6532, -79.3832], 13);
-        
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(map);
+        // Initialize map with error handling
+        let map;
+        try {
+            map = L.map('map', {
+                zoomControl: true,
+                scrollWheelZoom: true,
+                doubleClickZoom: true,
+                touchZoom: true,
+                zoomAnimation: true,
+                fadeAnimation: true,
+                markerZoomAnimation: true
+            }).setView([43.6532, -79.3832], 13);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19,
+                minZoom: 11
+            }).addTo(map);
+
+            // Smooth map interactions
+            map.on('zoomstart', function() {
+                map.getContainer().style.cursor = 'wait';
+            });
+
+            map.on('zoomend', function() {
+                map.getContainer().style.cursor = '';
+            });
+
+            map.on('movestart', function() {
+                map.getContainer().style.transition = 'all 0.3s ease';
+            });
+
+        } catch (error) {
+            console.error('Map initialization error:', error);
+            showToast('⚠️ Map loading issue. Please refresh the page.');
+        }
 
         // Store markers for focus function
         const markers = {};
@@ -1564,30 +1689,50 @@
             { name: "Dundas Station", lat: 43.6563, lng: -79.3805, type: "metro", line: "Line 1 (Yellow)" }
         ];
 
-        // Add main stop markers with enhanced popups
+        // Add main stop markers with enhanced popups and error handling
         stops.forEach(stop => {
-            const isMobile = window.innerWidth < 768;
-            const popupWidth = isMobile ? 180 : 220;
-            
-            const marker = L.marker([stop.lat, stop.lng], { 
-                icon: createNumberIcon(stop.num, stop.color, stop.isTransit)
-            })
-            .bindPopup(`
-                <div style="font-family: Arial; min-width: ${popupWidth}px;">
-                    <h3 style="margin: 0 0 8px 0; color: white; font-size: ${isMobile ? '14px' : '16px'};">
-                        ${stop.isTransit ? '🚇' : stop.num + '.'} ${stop.name}
-                    </h3>
-                    <p style="margin: 5px 0; font-size: ${isMobile ? '12px' : '13px'};"><strong>⏰ ${stop.time}</strong></p>
-                    <p style="margin: 5px 0; font-size: ${isMobile ? '11px' : '12px'}; line-height: 1.5;">${stop.info}</p>
-                </div>
-            `, { 
-                className: 'custom-popup',
-                maxWidth: popupWidth + 20,
-                closeButton: true
-            })
-            .addTo(map);
-            
-            markers[stop.num] = marker;
+            try {
+                const isMobile = window.innerWidth < 768;
+                const popupWidth = isMobile ? 180 : 220;
+                
+                const marker = L.marker([stop.lat, stop.lng], { 
+                    icon: createNumberIcon(stop.num, stop.color, stop.isTransit),
+                    riseOnHover: true
+                })
+                .bindPopup(`
+                    <div style="font-family: Arial; min-width: ${popupWidth}px;">
+                        <h3 style="margin: 0 0 8px 0; color: white; font-size: ${isMobile ? '14px' : '16px'};">
+                            ${stop.isTransit ? '🚇' : stop.num + '.'} ${stop.name}
+                        </h3>
+                        <p style="margin: 5px 0; font-size: ${isMobile ? '12px' : '13px'};"><strong>⏰ ${stop.time}</strong></p>
+                        <p style="margin: 5px 0; font-size: ${isMobile ? '11px' : '12px'}; line-height: 1.5;">${stop.info}</p>
+                    </div>
+                `, { 
+                    className: 'custom-popup',
+                    maxWidth: popupWidth + 20,
+                    closeButton: true,
+                    autoPan: true,
+                    autoPanPadding: [50, 50]
+                })
+                .addTo(map);
+                
+                // Add smooth popup animation
+                marker.on('popupopen', function() {
+                    try {
+                        const popup = marker.getPopup();
+                        const element = popup.getElement();
+                        if (element) {
+                            element.style.animation = 'fadeIn 0.3s ease';
+                        }
+                    } catch (e) {
+                        console.warn('Popup animation error:', e);
+                    }
+                });
+                
+                markers[stop.num] = marker;
+            } catch (error) {
+                console.error(`Error creating marker for ${stop.name}:`, error);
+            }
         });
 
         // Add transit station markers
@@ -1694,35 +1839,50 @@
             }
         ];
 
-        // Draw walking routes with labels
+        // Draw walking routes with labels and smooth animations
         walkingRoutes.forEach((route, index) => {
-            const polyline = L.polyline(route.coords, {
-                color: route.color,
-                weight: routeWeight,
-                opacity: 0.7,
-                dashArray: dashArray,
-                lineCap: 'round'
-            }).addTo(map);
-            
-            const popupContent = `
-                <strong style="font-size: ${isMobile ? '12px' : '14px'};">🚶 ${route.name}</strong><br>
-                <span style="font-size: ${isMobile ? '11px' : '12px'};">
-                Distance: ${route.distance}<br>
-                Time: ${route.time}
-                </span>
-            `;
-            polyline.bindPopup(popupContent);
+            try {
+                const polyline = L.polyline(route.coords, {
+                    color: route.color,
+                    weight: routeWeight,
+                    opacity: 0.7,
+                    dashArray: dashArray,
+                    lineCap: 'round',
+                    smoothFactor: 1
+                }).addTo(map);
+                
+                const popupContent = `
+                    <strong style="font-size: ${isMobile ? '12px' : '14px'};">🚶 ${route.name}</strong><br>
+                    <span style="font-size: ${isMobile ? '11px' : '12px'};">
+                    Distance: ${route.distance}<br>
+                    Time: ${route.time}
+                    </span>
+                `;
+                polyline.bindPopup(popupContent);
 
-            // Add animated dots along path
-            const decorator = L.polyline(route.coords, {
-                color: route.color,
-                weight: 2,
-                opacity: 0.5,
-                dashArray: '1, 20'
-            }).addTo(map);
+                // Add hover effect on desktop
+                if (window.innerWidth >= 768) {
+                    polyline.on('mouseover', function() {
+                        this.setStyle({ weight: routeWeight + 2, opacity: 1 });
+                    });
+                    polyline.on('mouseout', function() {
+                        this.setStyle({ weight: routeWeight, opacity: 0.7 });
+                    });
+                }
+
+                // Add animated dots along path for visual appeal
+                const decorator = L.polyline(route.coords, {
+                    color: route.color,
+                    weight: 2,
+                    opacity: 0.5,
+                    dashArray: '1, 20'
+                }).addTo(map);
+            } catch (error) {
+                console.error(`Error creating route ${route.name}:`, error);
+            }
         });
 
-        // Transit route (subway)
+        // Transit route (subway) with smooth styling
         const subwayRoute = [
             [43.6490, -79.3778], // King Station
             [43.6510, -79.3795], // Waypoint
@@ -1733,19 +1893,34 @@
             [43.6676, -79.3937]  // Museum Station
         ];
 
-        L.polyline(subwayRoute, {
-            color: '#00897b',
-            weight: isMobile ? 5 : 6,
-            opacity: 0.9,
-            lineCap: 'round'
-        }).bindPopup(`
-            <div style="font-size: ${isMobile ? '12px' : '14px'};">
-                <strong>🚇 TTC Line 1 (Yellow)</strong><br>
-                King → Museum Station<br>
-                5 stops, ~8 minutes<br>
-                Cost: $3.35
-            </div>
-        `).addTo(map);
+        try {
+            const subwayLine = L.polyline(subwayRoute, {
+                color: '#00897b',
+                weight: isMobile ? 5 : 6,
+                opacity: 0.9,
+                lineCap: 'round',
+                smoothFactor: 1
+            }).bindPopup(`
+                <div style="font-size: ${isMobile ? '12px' : '14px'};">
+                    <strong>🚇 TTC Line 1 (Yellow)</strong><br>
+                    King → Museum Station<br>
+                    5 stops, ~8 minutes<br>
+                    Cost: $3.35
+                </div>
+            `).addTo(map);
+
+            // Add hover effect on desktop
+            if (window.innerWidth >= 768) {
+                subwayLine.on('mouseover', function() {
+                    this.setStyle({ weight: 8, opacity: 1 });
+                });
+                subwayLine.on('mouseout', function() {
+                    this.setStyle({ weight: 6, opacity: 0.9 });
+                });
+            }
+        } catch (error) {
+            console.error('Subway route error:', error);
+        }
 
         // Enhanced legend with mobile toggle
         const legend = L.control({position: 'topright'});
@@ -1881,25 +2056,46 @@
             }
         };
 
-        // Focus function with responsive zoom
+        // Focus function with smooth animation and error handling
         window.focusOnMap = function(num) {
-            const marker = markers[num];
-            if (marker) {
+            try {
+                const marker = markers[num];
+                if (!marker || !map) return;
+                
                 const isMobile = window.innerWidth < 768;
                 const zoomLevel = isMobile ? 15 : 16;
-                map.setView(marker.getLatLng(), zoomLevel, { 
+                
+                // Use flyTo for smooth animation
+                map.flyTo(marker.getLatLng(), zoomLevel, { 
                     animate: true,
-                    duration: 0.8
+                    duration: 1,
+                    easeLinearity: 0.25
                 });
-                setTimeout(() => marker.openPopup(), 500);
+                
+                // Open popup after animation
+                setTimeout(() => {
+                    try {
+                        marker.openPopup();
+                    } catch (e) {
+                        console.warn('Popup open error:', e);
+                    }
+                }, 1000);
                 
                 // Scroll to map on mobile
                 if (isMobile) {
-                    document.getElementById('map').scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'start' 
-                    });
+                    setTimeout(() => {
+                        const mapElement = document.getElementById('map');
+                        if (mapElement) {
+                            mapElement.scrollIntoView({ 
+                                behavior: 'smooth', 
+                                block: 'start' 
+                            });
+                        }
+                    }, 500);
                 }
+            } catch (error) {
+                console.error('Focus map error:', error);
+                showToast('⚠️ Map focus error');
             }
         };
 
@@ -1928,34 +2124,97 @@
         }
 
         // Fit all markers on load with responsive padding
-        const bounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
-        const padding = window.innerWidth < 768 ? [30, 30] : [50, 50];
-        map.fitBounds(bounds, { padding: padding });
+        try {
+            const bounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
+            const padding = window.innerWidth < 768 ? [30, 30] : [50, 50];
+            
+            setTimeout(() => {
+                map.flyToBounds(bounds, { 
+                    padding: padding,
+                    animate: true,
+                    duration: 1
+                });
+            }, 500);
+        } catch (error) {
+            console.error('Fit bounds error:', error);
+        }
 
-        // Handle window resize
+        // Handle window resize smoothly
         let resizeTimer;
+        let isResizing = false;
+        
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimer);
+            
+            if (!isResizing) {
+                isResizing = true;
+                document.body.style.overflow = 'hidden'; // Prevent scroll during resize
+            }
+            
             resizeTimer = setTimeout(function() {
-                map.invalidateSize();
-                const newPadding = window.innerWidth < 768 ? [30, 30] : [50, 50];
-                map.fitBounds(bounds, { padding: newPadding });
+                try {
+                    map.invalidateSize({ animate: true, pan: false });
+                    
+                    const newPadding = window.innerWidth < 768 ? [30, 30] : [50, 50];
+                    const bounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
+                    
+                    map.flyToBounds(bounds, { 
+                        padding: newPadding,
+                        animate: true,
+                        duration: 0.5
+                    });
+                } catch (error) {
+                    console.warn('Resize error:', error);
+                }
+                
+                document.body.style.overflow = '';
+                isResizing = false;
             }, 250);
         });
 
-        // Disable scroll zoom on mobile to prevent accidental zooming
+        // Smooth scroll zoom behavior for mobile
         if (window.innerWidth < 768) {
-            map.scrollWheelZoom.disable();
-            // Enable zoom on click
-            map.on('click', function() {
-                if (!map.scrollWheelZoom.enabled()) {
-                    map.scrollWheelZoom.enable();
-                    setTimeout(() => {
-                        map.scrollWheelZoom.disable();
-                    }, 3000);
-                }
-            });
+            try {
+                map.scrollWheelZoom.disable();
+                
+                // Enable zoom on double tap
+                let tapTimer;
+                let lastTap = 0;
+                
+                map.on('click', function() {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    
+                    if (tapLength < 500 && tapLength > 0) {
+                        // Double tap detected
+                        if (!map.scrollWheelZoom.enabled()) {
+                            map.scrollWheelZoom.enable();
+                            showToast('📍 Zoom enabled for 3 seconds', 2000);
+                            
+                            setTimeout(() => {
+                                if (map.scrollWheelZoom.enabled()) {
+                                    map.scrollWheelZoom.disable();
+                                }
+                            }, 3000);
+                        }
+                    }
+                    lastTap = currentTime;
+                });
+            } catch (error) {
+                console.warn('Mobile zoom setup error:', error);
+            }
         }
+
+        // Prevent map from breaking on orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                try {
+                    map.invalidateSize({ animate: true });
+                } catch (error) {
+                    console.warn('Orientation change error:', error);
+                }
+            }, 200);
+        });
 
         // Progress tracker functionality
         let completedStops = new Set();
@@ -2050,33 +2309,53 @@
             }
 
             const locateBtn = document.getElementById('locate-btn');
-            locateBtn.classList.add('active');
+            if (locateBtn) locateBtn.classList.add('active');
             isTracking = true;
 
-            // Get initial position
+            // Get initial position with error handling
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     updateUserLocation(position);
                     showToast('✅ Location tracking enabled');
                 },
                 (error) => {
+                    let message = '❌ Could not get your location';
+                    if (error.code === 1) {
+                        message = '❌ Location permission denied. Please enable in browser settings.';
+                    } else if (error.code === 2) {
+                        message = '❌ Location unavailable. Check your device settings.';
+                    } else if (error.code === 3) {
+                        message = '❌ Location request timeout. Try again.';
+                    }
+                    showToast(message, 5000);
                     console.error('Location error:', error);
-                    showToast('❌ Could not get your location');
                     stopTracking();
                 },
-                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
 
-            // Watch position continuously
-            watchId = navigator.geolocation.watchPosition(
-                updateUserLocation,
-                (error) => console.error('Watch error:', error),
-                { enableHighAccuracy: true, maximumAge: 1000 }
-            );
+            // Watch position continuously with error handling
+            try {
+                watchId = navigator.geolocation.watchPosition(
+                    updateUserLocation,
+                    (error) => {
+                        console.warn('Watch position error:', error);
+                        // Don't stop tracking on minor errors
+                    },
+                    { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 }
+                );
+            } catch (error) {
+                console.error('Watch position failed:', error);
+                showToast('⚠️ Continuous tracking unavailable');
+            }
 
-            // Start device orientation (compass)
+            // Start device orientation (compass) with error handling
             if (window.DeviceOrientationEvent) {
-                window.addEventListener('deviceorientation', handleOrientation);
+                try {
+                    window.addEventListener('deviceorientation', handleOrientation);
+                } catch (error) {
+                    console.warn('Device orientation unavailable:', error);
+                }
             }
         }
 
@@ -2087,68 +2366,98 @@
             }
             
             if (userMarker) {
-                map.removeLayer(userMarker);
+                try {
+                    map.removeLayer(userMarker);
+                } catch (error) {
+                    console.warn('Error removing user marker:', error);
+                }
                 userMarker = null;
             }
 
             if (accuracyCircle) {
-                map.removeLayer(accuracyCircle);
+                try {
+                    map.removeLayer(accuracyCircle);
+                } catch (error) {
+                    console.warn('Error removing accuracy circle:', error);
+                }
                 accuracyCircle = null;
             }
 
             const locateBtn = document.getElementById('locate-btn');
-            locateBtn.classList.remove('active');
+            if (locateBtn) locateBtn.classList.remove('active');
             isTracking = false;
 
-            window.removeEventListener('deviceorientation', handleOrientation);
+            try {
+                window.removeEventListener('deviceorientation', handleOrientation);
+            } catch (error) {
+                console.warn('Error removing orientation listener:', error);
+            }
+            
             showToast('Location tracking stopped');
         }
 
         function updateUserLocation(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            const accuracy = position.coords.accuracy;
+            try {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const accuracy = position.coords.accuracy;
 
-            userLocation = { lat, lng };
+                userLocation = { lat, lng };
 
-            // Create or update user marker
-            if (!userMarker) {
-                const userIcon = L.divIcon({
-                    html: `<div style="width: 20px; height: 20px; background: #4285f4; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 10px rgba(66,133,244,0.5);"></div>`,
-                    className: '',
-                    iconSize: [20, 20],
-                    iconAnchor: [10, 10]
-                });
-                userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(map);
+                // Create or update user marker
+                if (!userMarker) {
+                    const userIcon = L.divIcon({
+                        html: `<div style="width: 20px; height: 20px; background: #4285f4; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 10px rgba(66,133,244,0.5);"></div>`,
+                        className: '',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+                    userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(map);
+                    
+                    // Center map on user with smooth animation
+                    map.flyTo([lat, lng], 15, {
+                        animate: true,
+                        duration: 1
+                    });
+                } else {
+                    userMarker.setLatLng([lat, lng]);
+                }
+
+                // Update accuracy circle
+                if (accuracyCircle) {
+                    try {
+                        map.removeLayer(accuracyCircle);
+                    } catch (e) {
+                        console.warn('Error updating accuracy circle:', e);
+                    }
+                }
                 
-                // Center map on user
-                map.setView([lat, lng], 15, { animate: true });
-            } else {
-                userMarker.setLatLng([lat, lng]);
-            }
+                accuracyCircle = L.circle([lat, lng], {
+                    radius: accuracy,
+                    color: '#4285f4',
+                    fillColor: '#4285f4',
+                    fillOpacity: 0.1,
+                    weight: 1
+                }).addTo(map);
 
-            // Update accuracy circle
-            if (accuracyCircle) {
-                map.removeLayer(accuracyCircle);
-            }
-            accuracyCircle = L.circle([lat, lng], {
-                radius: accuracy,
-                color: '#4285f4',
-                fillColor: '#4285f4',
-                fillOpacity: 0.1,
-                weight: 1
-            }).addTo(map);
-
-            // Update navigation if active
-            if (navigationActive) {
-                updateNavigation();
+                // Update navigation if active
+                if (navigationActive) {
+                    updateNavigation();
+                }
+            } catch (error) {
+                console.error('Error updating user location:', error);
+                showToast('⚠️ Location update error');
             }
         }
 
         function handleOrientation(event) {
-            if (event.alpha !== null) {
-                userHeading = event.alpha;
-                updateDirectionArrow();
+            try {
+                if (event.alpha !== null) {
+                    userHeading = event.alpha;
+                    updateDirectionArrow();
+                }
+            } catch (error) {
+                console.warn('Orientation error:', error);
             }
         }
 
@@ -2573,25 +2882,57 @@
             }
         });
 
-        // Initialize on load
-        console.log('🎉 Jay\'s Toronto Guide loaded!\n' +
-                    'Keyboard shortcuts:\n' +
-                    'T = Toggle tracking\n' +
-                    'N = Next stop\n' +
-                    'S = Stop navigation\n' +
-                    'W = Weather\n' +
-                    'V = Voice navigation');
-        
-        // Prompt for location on mobile
-        if (window.innerWidth < 768) {
-            setTimeout(() => {
-                if (!isTracking) {
-                    const enable = confirm('📍 Enable GPS tracking for real-time navigation?\n\nYou can also enable it anytime by tapping the 📍 button.');
-                    if (enable) {
-                        toggleTracking();
+        // Initialize on load with proper error handling
+        try {
+            console.log('🎉 Jay\'s Toronto Guide loaded!\n' +
+                        'Keyboard shortcuts:\n' +
+                        'T = Toggle tracking\n' +
+                        'N = Next stop\n' +
+                        'S = Stop navigation\n' +
+                        'W = Weather\n' +
+                        'V = Voice navigation');
+            
+            // Prompt for location on mobile (delayed to avoid overwhelming user)
+            if (window.innerWidth < 768) {
+                setTimeout(() => {
+                    if (!isTracking) {
+                        const enable = confirm('📍 Enable GPS tracking for real-time navigation?\n\nYou can also enable it anytime by tapping the 📍 button.');
+                        if (enable) {
+                            toggleTracking();
+                        }
+                    }
+                }, 2000);
+            }
+
+            // Add visibility change handler to pause/resume tracking
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    console.log('Page hidden - GPS continues in background');
+                } else {
+                    console.log('Page visible - Refreshing map');
+                    try {
+                        map.invalidateSize({ animate: true });
+                    } catch (e) {
+                        console.warn('Map refresh error:', e);
                     }
                 }
-            }, 1500);
+            });
+
+            // Smooth page load
+            window.addEventListener('load', function() {
+                try {
+                    // Final map size adjustment
+                    setTimeout(() => {
+                        map.invalidateSize({ animate: false });
+                    }, 500);
+                } catch (error) {
+                    console.warn('Load adjustment error:', error);
+                }
+            });
+
+        } catch (error) {
+            console.error('Initialization error:', error);
+            showToast('⚠️ Some features may not work. Please refresh the page.');
         }
 
         // Load saved progress from localStorage (browser-dependent)
